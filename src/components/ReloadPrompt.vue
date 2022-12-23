@@ -3,7 +3,7 @@ import { useRegisterSW } from 'virtual:pwa-register/vue';
 
 const UPDATE_CHECK_INTERVAL = 20000; // 20sec
 
-const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
+const { needRefresh, updateServiceWorker } = useRegisterSW({
   immediate: true,
   onRegisteredSW(swUrl, r) {
     console.log(`Refresh Checker: service worker at: ${swUrl}`);
@@ -16,31 +16,21 @@ const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 });
 
 const close = async () => {
-  offlineReady.value = false;
   needRefresh.value = false;
 };
 </script>
 
 <template>
   <div
-    v-if="offlineReady || needRefresh"
+    v-if="needRefresh"
     class="pwa-toast"
     role="alert"
   >
     <div class="message">
-      <span v-if="offlineReady">
-        App ready to work offline
-      </span>
-      <span v-else>
-        New content available, click on reload button to update.
-      </span>
+      <span>New content available, click on reload button to update.</span>
     </div>
-    <button v-if="needRefresh" @click="updateServiceWorker()">
-      Reload
-    </button>
-    <button @click="close">
-      Close
-    </button>
+    <button v-if="needRefresh" type="button" @click="updateServiceWorker()">Reload</button>
+    <button type="button" @click="close()">Close</button>
   </div>
 </template>
 
