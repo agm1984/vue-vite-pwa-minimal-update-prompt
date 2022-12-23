@@ -33,3 +33,15 @@ $ npm run preview
 ```
 
 5. Go back to the browser tab. Wait up to 20 seconds for it to detect the new build. See `/src/components/ReloadPrompt.vue` to change the polling interval period.
+
+## Final Notes
+
+> This project is not attempting to version assets, so it is likely that those may require additions to the `vite.config.js` file to declare which assets need to be tracked. In the VitePWA options object, see the `includeAssets` key.
+
+For example in `vite.config.js`:
+
+``` javascript
+VitePWA({
+    includeAssets: ['fonts/*.ttf', 'images/*.png'],
+})
+```
