@@ -1,31 +1,24 @@
 <script setup>
-import { useRegisterSW } from 'virtual:pwa-register/vue'
-import { pwaInfo } from 'virtual:pwa-info'
+import { useRegisterSW } from 'virtual:pwa-register/vue';
 
-console.log(pwaInfo)
+const UPDATE_CHECK_INTERVAL = 20000; // 20sec
 
-// replaced dyanmicaly
-const reloadSW = '__RELOAD_SW__'
 const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
   immediate: true,
   onRegisteredSW(swUrl, r) {
-    console.log(`Service Worker at: ${swUrl}`)
+    console.log(`Refresh Checker: service worker at: ${swUrl}`);
 
-    if (reloadSW === 'true') {
-      r && setInterval(async () => {
-        console.log('Checking for sw update')
-        await r.update()
-      }, 20000 /* 20s for testing purposes */)
-    }
-    else {
-      console.log(`SW Registered: ${r}`)
-    }
+    r && setInterval(async () => {
+        console.log('Refresh Checker: checking for update');
+        await r.update();
+    }, UPDATE_CHECK_INTERVAL);
   },
-})
+});
+
 const close = async () => {
-  offlineReady.value = false
-  needRefresh.value = false
-}
+  offlineReady.value = false;
+  needRefresh.value = false;
+};
 </script>
 
 <template>
